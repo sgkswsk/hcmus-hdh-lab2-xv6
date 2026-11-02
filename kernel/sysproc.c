@@ -106,5 +106,5 @@ sys_sysinfo(void)
 	  .nproc = get_nproc(),
   };
 
-  return copyout(myproc()->pagetable, dstva_si, &si, sizeof(si));
+  return copyout(myproc()->pagetable, dstva_si, (char*)&si, sizeof(si));
 }
