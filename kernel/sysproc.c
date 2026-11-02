@@ -98,5 +98,13 @@ sys_uptime(void)
 uint64
 sys_sysinfo(void)
 {
-  
+  uint64 dstva_si;
+  argaddr(0, &dstva_si);
+
+  struct sysinfo si = {
+	.freemem = get_freemem();
+	.nproc = get_nproc();
+  };
+
+  return copyout(myproc()->pagetable, dstva_si, &si, sizeof(si));
 }
