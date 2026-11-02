@@ -12,7 +12,7 @@ int main() {
 	}
 
 	printf("struct sysinfo {\n");
-	printf("\t.freemem = %ull\n", si.freemem);
+	printf("\t.freemem = %ull\n", si.freemem * 4096);
 	printf("\t.nproc = %ull\n", si.nproc);
 	printf("}\n");
 

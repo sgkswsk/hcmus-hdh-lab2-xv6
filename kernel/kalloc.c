@@ -14,7 +14,7 @@ void freerange(void *pa_start, void *pa_end);
 extern char end[]; // first address after kernel.
                    // defined by kernel.ld.
 
-int freemem;	   // track remaining free memory block
+int freemem;	     // track remaining free memory page
 
 struct run {
   struct run *next;

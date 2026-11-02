@@ -102,8 +102,8 @@ sys_sysinfo(void)
   argaddr(0, &dstva_si);
 
   struct sysinfo si = {
-	.freemem = get_freemem();
-	.nproc = get_nproc();
+	  .freemem = get_freemem(),
+	  .nproc = get_nproc(),
   };
 
   return copyout(myproc()->pagetable, dstva_si, &si, sizeof(si));
