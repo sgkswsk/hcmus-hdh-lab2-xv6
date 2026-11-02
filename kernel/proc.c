@@ -5,6 +5,7 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+#include "ptree.h"
 
 struct cpu cpus[NCPU];
 
@@ -705,4 +706,51 @@ get_nproc()
   }
 
   return n;
+}
+
+int
+get_ptree(uint64 addr, int max)
+{
+  struct proc *p;
+  struct proc *curr_p = myproc();
+  struct ptreeinfo kinfo;
+  int count = 0;
+
+  // Kiem tra loi: dia chi bo dem khong hop le hoac max <= 0
+  if(addr == 0 || max <= 0)
+    return -1;
+
+  acquire(&wait_lock);
+
+  for(p = proc; p < &proc[NPROC]; p++) {
+    acquire(&p->lock);
+    if(p->state != UNUSED) {
+      // Kiem tra loi: so luong tien trinh thuc te lon hon max
+      if(count >= max) {
+        release(&p->lock);
+        release(&wait_lock);
+        return -1;
+      }
+
+      kinfo.pid = p->pid;
+      kinfo.ppid = (p->parent != 0) ? p->parent->pid : 0;
+      kinfo.state = p->state;
+      kinfo.memsize = p->sz;
+      safestrcpy(kinfo.name, p->name, sizeof(kinfo.name));
+
+      release(&p->lock);
+
+      // Copy cau truc kinfo tu kernel space sang mang buf o user space
+      if(copyout(curr_p->pagetable, addr + count * sizeof(struct ptreeinfo), (char *)&kinfo, sizeof(kinfo)) < 0) {
+        release(&wait_lock);
+        return -1;
+      }
+      count++;
+    } else {
+      release(&p->lock);
+    }
+  }
+
+  release(&wait_lock);
+  return count;
 }

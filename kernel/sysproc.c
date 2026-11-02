@@ -108,3 +108,14 @@ sys_sysinfo(void)
 
   return copyout(myproc()->pagetable, dstva_si, (char*)&si, sizeof(si));
 }
+uint64
+sys_ptree(void)
+{
+  uint64 buf;
+  int max;
+
+  argaddr(0, &buf);
+  argint(1, &max);
+
+  return get_ptree(buf, max);
+}
