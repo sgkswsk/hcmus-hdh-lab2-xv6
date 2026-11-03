@@ -94,6 +94,7 @@ endif
 
 CFLAGS += $(XCFLAGS)
 CFLAGS += -MD
+CFLAGS += -std=gnu17 -Wno-unused-but-set-variable
 CFLAGS += -mcmodel=medany
 # CFLAGS += -ffreestanding -fno-common -nostdlib -mno-relax
 CFLAGS += -fno-common -nostdlib
@@ -191,6 +192,7 @@ UPROGS=\
 	$U/_sh\
 	$U/_stressfs\
 		$U/_sysinfotest\
+	$U/_trace\
 	$U/_usertests\
 	$U/_grind\
 	$U/_wc\

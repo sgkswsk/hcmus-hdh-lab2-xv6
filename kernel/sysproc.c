@@ -93,6 +93,16 @@ sys_uptime(void)
   return xticks;
 }
 
+uint64
+sys_trace(void)
+{
+  int mask;
+
+  argint(0, &mask);
+  myproc()->tracemask = mask;
+  return 0;
+}
+
 // populate the sysinfo struct, return 0 if success
 // non-zero otherwise
 uint64
